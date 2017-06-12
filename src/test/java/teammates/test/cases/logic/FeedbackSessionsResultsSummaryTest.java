@@ -9,7 +9,6 @@ import teammates.common.datatransfer.attributes.InstructorAttributes;
 import teammates.common.exception.EntityDoesNotExistException;
 import teammates.common.util.Const;
 import teammates.logic.core.FeedbackQuestionsLogic;
-import teammates.logic.core.FeedbackResponsesLogic;
 import teammates.logic.core.FeedbackSessionsLogic;
 
 /**
