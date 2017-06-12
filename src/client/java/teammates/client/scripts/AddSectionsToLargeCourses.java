@@ -43,6 +43,8 @@ public class AddSectionsToLargeCourses extends RemoteApiClient {
     // modify for preview
     private static final boolean isPreview = true;
 
+    private static final String SELECT_STATEMENT = "SELECT FROM ";
+    
     /*
      * IMPORTANT: *******************************
      * This script does not update FeedbackResponseComments because it was created
@@ -83,7 +85,7 @@ public class AddSectionsToLargeCourses extends RemoteApiClient {
     }
 
     private Set<String> getCourses() {
-        String q = "SELECT FROM " + Course.class.getName();
+        String q = SELECT_STATEMENT + Course.class.getName();
         @SuppressWarnings("unchecked")
         List<Course> courses = (List<Course>) PM.newQuery(q).execute();
 
@@ -179,7 +181,7 @@ public class AddSectionsToLargeCourses extends RemoteApiClient {
 
     private CourseStudent getStudent(String email, String courseId) {
 
-        String q = "SELECT FROM " + CourseStudent.class.getName() + " "
+        String q = SELECT_STATEMENT + CourseStudent.class.getName() + " "
                 + "WHERE email == emailParam && courseID == courseIdParam" + " "
                 + "PARAMETERS String emailParam, String courseIdParam";
         @SuppressWarnings("unchecked")
@@ -225,7 +227,7 @@ public class AddSectionsToLargeCourses extends RemoteApiClient {
         String studentTeam = student.team;
         String course = student.course;
 
-        String q = "SELECT FROM " + FeedbackResponse.class.getName() + " "
+        String q = SELECT_STATEMENT + FeedbackResponse.class.getName() + " "
                 + "WHERE giverEmail == emailParam" + " "
                 + "&& courseId == courseParam" + " "
                 + "PARAMETERS String emailParam, String courseParam";
@@ -233,7 +235,7 @@ public class AddSectionsToLargeCourses extends RemoteApiClient {
         @SuppressWarnings("unchecked")
         List<FeedbackResponse> responsesAsGiver = (List<FeedbackResponse>) PM.newQuery(q).execute(studentEmail, course);
 
-        q = "SELECT FROM " + FeedbackResponse.class.getName() + " "
+        q = SELECT_STATEMENT + FeedbackResponse.class.getName() + " "
                 + "WHERE (receiver == emailParam" + " "
                 + "|| receiver == teamParam)" + " "
                 + "&& courseId == courseParam" + " "
