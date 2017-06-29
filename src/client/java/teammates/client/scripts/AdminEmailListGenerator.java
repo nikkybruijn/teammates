@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.JDOObjectNotFoundException;
@@ -36,6 +38,8 @@ import teammates.storage.entity.Instructor;
  * List file configuration is preset in admin email configuration section.
  */
 public class AdminEmailListGenerator extends RemoteApiClient {
+
+    private final static Logger LOGGER = Logger.getLogger(AdminEmailListGenerator.class.getName());
 
     private enum StudentStatus { REG, UNREG, ALL }
 
@@ -245,7 +249,7 @@ public class AdminEmailListGenerator extends RemoteApiClient {
             w.close();
 
         } catch (IOException e) {
-            System.err.println("Problem writing to the file statsTest.txt");
+          LOGGER.log(Level.WARNING, "Problem writing to the file statsTest.txt", e);
         }
     }
 
@@ -259,7 +263,7 @@ public class AdminEmailListGenerator extends RemoteApiClient {
           w.write(email + ",");
           emailCount++;
         } catch (IOException e) {
-          System.err.println("Problem writing to the file statsTest.txt");
+          LOGGER.log(Level.WARNING, "Problem writing to the file statsTest.txt", e);
         }
       }
     }
