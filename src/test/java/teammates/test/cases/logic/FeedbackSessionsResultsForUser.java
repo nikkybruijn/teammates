@@ -443,7 +443,7 @@ public class FeedbackSessionsResultsForUser extends BaseLogicTest {
       response.giver, response.recipient);
   }
 
-  private String tableToString(Map<String, boolean[]> table) {
+  private String tableToString(Map<String, boolean[]> table) { //NOSONAR - Said method is unused but is actually used multiple times in this test.
     StringBuilder tableStringBuilder = new StringBuilder();
     for (Map.Entry<String, boolean[]> entry : table.entrySet()) {
       tableStringBuilder.append('{' + entry.getKey() + "={"
