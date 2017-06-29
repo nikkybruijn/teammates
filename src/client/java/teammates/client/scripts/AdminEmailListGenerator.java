@@ -227,37 +227,18 @@ public class AdminEmailListGenerator extends RemoteApiClient {
         return student.getGoogleId() != null && !student.getGoogleId().isEmpty();
     }
 
-    private void writeEmailsIntoTextFile(HashSet<String> studentEmailSet,
-                                         HashSet<String> instructorEmailSet) {
-
+    private void writeEmailsIntoTextFile(HashSet<String> studentEmailSet, HashSet<String> instructorEmailSet) {
         try {
-
             File newFile = new File(filePathForSaving + this.getCurrentDateForDisplay() + ".txt");
             FileOutputStream fos = new FileOutputStream(newFile);
             OutputStreamWriter osw = new OutputStreamWriter(fos);
             Writer w = new BufferedWriter(osw);
 
             int studentEmailCount = 0;
-            if (!studentEmailSet.isEmpty()) {
-                for (String email : studentEmailSet) {
-                    if (!includeTestData && email.endsWith(".tmt")) {
-                        continue;
-                    }
-                    w.write(email + ",");
-                    studentEmailCount++;
-                }
-            }
+            writeEmail(studentEmailSet, studentEmailCount, w);
 
             int instructorEmailCount = 0;
-            if (!instructorEmailSet.isEmpty()) {
-                for (String email : instructorEmailSet) {
-                    if (!includeTestData && email.endsWith(".tmt")) {
-                        continue;
-                    }
-                    w.write(email + ",");
-                    instructorEmailCount++;
-                }
-            }
+            writeEmail(instructorEmailSet, instructorEmailCount, w);
 
             System.out.print("Student email num: " + studentEmailCount + "\n");
             System.out.print("Instructor email num: " + instructorEmailCount + "\n");
@@ -267,6 +248,22 @@ public class AdminEmailListGenerator extends RemoteApiClient {
             System.err.println("Problem writing to the file statsTest.txt");
         }
     }
+
+  private void writeEmail(HashSet<String> emailSet, int emailCount, Writer w) {
+    if (!emailSet.isEmpty()) {
+      for (String email : emailSet) {
+        if (!includeTestData && email.endsWith(".tmt")) {
+          continue;
+        }
+        try {
+          w.write(email + ",");
+          emailCount++;
+        } catch (IOException e) {
+          System.err.println("Problem writing to the file statsTest.txt");
+        }
+      }
+    }
+  }
 
     private boolean isInstructorCreatedInRange(Instructor instructor) {
 
