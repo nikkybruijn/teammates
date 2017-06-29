@@ -1,29 +1,9 @@
 package teammates.test.cases.logic;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.testng.annotations.Test;
-
 import com.google.appengine.api.datastore.Text;
-
-import teammates.common.datatransfer.DataBundle;
-import teammates.common.datatransfer.FeedbackParticipantType;
-import teammates.common.datatransfer.FeedbackSessionDetailsBundle;
-import teammates.common.datatransfer.FeedbackSessionQuestionsBundle;
-import teammates.common.datatransfer.FeedbackSessionResultsBundle;
-import teammates.common.datatransfer.FeedbackSessionStats;
-import teammates.common.datatransfer.FeedbackSessionType;
-import teammates.common.datatransfer.attributes.CourseAttributes;
-import teammates.common.datatransfer.attributes.FeedbackQuestionAttributes;
-import teammates.common.datatransfer.attributes.FeedbackResponseAttributes;
-import teammates.common.datatransfer.attributes.FeedbackSessionAttributes;
-import teammates.common.datatransfer.attributes.InstructorAttributes;
-import teammates.common.datatransfer.attributes.StudentAttributes;
+import org.testng.annotations.Test;
+import teammates.common.datatransfer.*;
+import teammates.common.datatransfer.attributes.*;
 import teammates.common.datatransfer.questions.FeedbackQuestionDetails;
 import teammates.common.datatransfer.questions.FeedbackQuestionType;
 import teammates.common.exception.EntityAlreadyExistsException;
@@ -37,6 +17,8 @@ import teammates.logic.core.FeedbackResponsesLogic;
 import teammates.logic.core.FeedbackSessionsLogic;
 import teammates.test.driver.AssertHelper;
 import teammates.test.driver.TimeHelperExtension;
+
+import java.util.*;
 
 /**
  * SUT: {@link FeedbackSessionsLogic}.
@@ -734,16 +716,6 @@ public class FeedbackSessionsLogicTest extends BaseLogicTest {
         }
     }
 
-    private String getStudentAnonEmail(DataBundle dataBundle, String studentKey) {
-        return FeedbackSessionResultsBundle.getAnonEmail(FeedbackParticipantType.STUDENTS,
-                                                         dataBundle.students.get(studentKey).name);
-    }
-
-    private String getStudentAnonName(DataBundle dataBundle, String studentKey) {
-        return FeedbackSessionResultsBundle.getAnonName(FeedbackParticipantType.STUDENTS,
-                                                        dataBundle.students.get(studentKey).name);
-    }
-
     private void testIsFeedbackSessionViewableToStudents() {
         ______TS("Session with questions for students to answer");
         FeedbackSessionAttributes session = dataBundle.feedbackSessions.get("session1InCourse1");
@@ -945,11 +917,6 @@ public class FeedbackSessionsLogicTest extends BaseLogicTest {
         return questionToGet;
     }
 
-    // Extract response id from datastore based on json key.
-    private String getResponseId(String jsonId, DataBundle bundle) {
-        return getResponseFromDatastore(jsonId, bundle).getId();
-    }
-
     private FeedbackResponseAttributes getResponseFromDatastore(String jsonId, DataBundle bundle) {
         FeedbackResponseAttributes response = bundle.feedbackResponses.get(jsonId);
 
@@ -973,21 +940,6 @@ public class FeedbackSessionsLogicTest extends BaseLogicTest {
                 fsLogic.unpublishFeedbackSession(fs);
             }
         }
-    }
-
-    // Stringifies the visibility table for easy testing/comparison.
-    private String tableToString(Map<String, boolean[]> table) {
-        StringBuilder tableStringBuilder = new StringBuilder();
-        for (Map.Entry<String, boolean[]> entry : table.entrySet()) {
-            tableStringBuilder.append('{' + entry.getKey() + "={"
-                                      + entry.getValue()[0] + ','
-                                      + entry.getValue()[1] + "}},");
-        }
-        String tableString = tableStringBuilder.toString();
-        if (!tableString.isEmpty()) {
-            tableString = tableString.substring(0, tableString.length() - 1);
-        }
-        return tableString;
     }
 
     private void testDeleteFeedbackSessionsForCourse() {

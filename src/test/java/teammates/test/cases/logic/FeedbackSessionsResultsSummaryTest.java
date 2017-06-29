@@ -4,9 +4,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.testng.annotations.Test;
 
 import teammates.common.datatransfer.DataBundle;
+import teammates.common.datatransfer.FeedbackParticipantType;
+import teammates.common.datatransfer.FeedbackSessionResultsBundle;
 import teammates.common.datatransfer.attributes.FeedbackSessionAttributes;
 import teammates.common.datatransfer.attributes.InstructorAttributes;
 import teammates.common.exception.EntityDoesNotExistException;
+import teammates.common.exception.ExceedingRangeException;
 import teammates.common.util.Const;
 import teammates.logic.core.FeedbackQuestionsLogic;
 import teammates.logic.core.FeedbackSessionsLogic;
@@ -31,7 +34,7 @@ public class FeedbackSessionsResultsSummaryTest extends BaseLogicTest {
 
     }
 
-        private void testGetFeedbackSessionResultsSummaryAsCsv() throws Exception {
+        private void testGetFeedbackSessionResultsSummaryAsCsv() throws ExceedingRangeException, EntityDoesNotExistException {
 
         ______TS("typical case: get all results");
 
@@ -733,7 +736,13 @@ public class FeedbackSessionsResultsSummaryTest extends BaseLogicTest {
             assertEquals("Trying to view a non-existent feedback session: "
                          + "no course" + "/" + "non.existent",
                          e.getMessage());
+            throw e;
         }
     }
- 
+
+  private String getStudentAnonName(DataBundle dataBundle, String studentKey) {
+    return FeedbackSessionResultsBundle.getAnonName(FeedbackParticipantType.STUDENTS,
+      dataBundle.students.get(studentKey).name);
+  }
+
 }

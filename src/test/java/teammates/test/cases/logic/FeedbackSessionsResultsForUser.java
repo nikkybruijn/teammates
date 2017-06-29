@@ -1,18 +1,24 @@
 package teammates.test.cases.logic;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.testng.annotations.Test;
-
 import teammates.common.datatransfer.DataBundle;
+import teammates.common.datatransfer.FeedbackParticipantType;
+import teammates.common.datatransfer.FeedbackSessionResultsBundle;
+import teammates.common.datatransfer.attributes.FeedbackResponseAttributes;
 import teammates.common.datatransfer.attributes.FeedbackSessionAttributes;
 import teammates.common.datatransfer.attributes.InstructorAttributes;
+import teammates.common.datatransfer.attributes.StudentAttributes;
 import teammates.common.exception.EntityDoesNotExistException;
 import teammates.common.util.Const;
 import teammates.logic.core.FeedbackQuestionsLogic;
 import teammates.logic.core.FeedbackResponsesLogic;
 import teammates.logic.core.FeedbackSessionsLogic;
+import teammates.test.driver.AssertHelper;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * SUT: {@link FeedbackSessionsLogic}.
@@ -35,7 +41,7 @@ public class FeedbackSessionsResultsForUser extends BaseLogicTest {
 
     }
 
-        private void testGetFeedbackSessionResultsForUser() throws Exception {
+        private void testGetFeedbackSessionResultsForUser() throws EntityDoesNotExistException {
 
         // This file contains a session with a private session + a standard
         // session which needs to have enough qn/response combinations to cover as much
@@ -400,8 +406,55 @@ public class FeedbackSessionsResultsForUser extends BaseLogicTest {
             assertEquals("Trying to view a non-existent feedback session: "
                          + session.getCourseId() + "/" + "invalid session",
                          e.getMessage());
+            throw e;
         }
         //TODO: check for cases where a person is both a student and an instructor
     }
- 
+
+  private String getStudentAnonEmail(DataBundle dataBundle, String studentKey) {
+    return FeedbackSessionResultsBundle.getAnonEmail(FeedbackParticipantType.STUDENTS,
+      dataBundle.students.get(studentKey).name);
+  }
+
+  private String getStudentAnonName(DataBundle dataBundle, String studentKey) {
+    return FeedbackSessionResultsBundle.getAnonName(FeedbackParticipantType.STUDENTS,
+      dataBundle.students.get(studentKey).name);
+  }
+
+  // Extract response id from datastore based on json key.
+  private String getResponseId(String jsonId, DataBundle bundle) {
+    return getResponseFromDatastore(jsonId, bundle).getId();
+  }
+
+  private FeedbackResponseAttributes getResponseFromDatastore(String jsonId, DataBundle bundle) {
+    FeedbackResponseAttributes response = bundle.feedbackResponses.get(jsonId);
+
+    String questionId = null;
+    try {
+      int qnNumber = Integer.parseInt(response.feedbackQuestionId);
+      questionId = fqLogic.getFeedbackQuestion(
+        response.feedbackSessionName, response.courseId,
+        qnNumber).getId();
+    } catch (NumberFormatException e) {
+      questionId = response.feedbackQuestionId;
+    }
+
+    return frLogic.getFeedbackResponse(questionId,
+      response.giver, response.recipient);
+  }
+
+  private String tableToString(Map<String, boolean[]> table) {
+    StringBuilder tableStringBuilder = new StringBuilder();
+    for (Map.Entry<String, boolean[]> entry : table.entrySet()) {
+      tableStringBuilder.append('{' + entry.getKey() + "={"
+        + entry.getValue()[0] + ','
+        + entry.getValue()[1] + "}},");
+    }
+    String tableString = tableStringBuilder.toString();
+    if (!tableString.isEmpty()) {
+      tableString = tableString.substring(0, tableString.length() - 1);
+    }
+    return tableString;
+  }
+
 }
