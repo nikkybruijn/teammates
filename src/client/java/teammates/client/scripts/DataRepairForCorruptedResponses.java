@@ -36,7 +36,7 @@ public class DataRepairForCorruptedResponses extends RemoteApiClient {
         List<FeedbackQuestionAttributes> questions = logic.getFeedbackQuestionsForSession(sessionName, courseId);
         for (FeedbackQuestionAttributes question : questions) {
             boolean needRepairGiverSection = isGiverContainingSection(question.giverType);
-            boolean needRepairRecipientSection = isRecipientContaningSection(question.giverType, question.recipientType);
+            boolean needRepairRecipientSection = isRecipientContainingSection(question.giverType, question.recipientType);
             if (needRepairGiverSection || needRepairRecipientSection) {
                 repairResponsesForQuestion(question, needRepairGiverSection, needRepairRecipientSection);
             }
@@ -93,7 +93,7 @@ public class DataRepairForCorruptedResponses extends RemoteApiClient {
         return giverType == FeedbackParticipantType.STUDENTS || giverType == FeedbackParticipantType.TEAMS;
     }
 
-    private boolean isRecipientContaningSection(FeedbackParticipantType giverType, FeedbackParticipantType recipientType) {
+    private boolean isRecipientContainingSection(FeedbackParticipantType giverType, FeedbackParticipantType recipientType) {
         return recipientType == FeedbackParticipantType.SELF && isGiverContainingSection(giverType)
                || recipientType == FeedbackParticipantType.STUDENTS
                || recipientType == FeedbackParticipantType.TEAMS
