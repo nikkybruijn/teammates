@@ -20,6 +20,7 @@ import teammates.logic.core.FeedbackSessionsLogic;
 public class FeedbackSessionsResultsSummaryTest extends BaseLogicTest {
     private static FeedbackSessionsLogic fsLogic = FeedbackSessionsLogic.inst();
     private static FeedbackQuestionsLogic fqLogic = FeedbackQuestionsLogic.inst();
+    private final static String INSTRUCTOR_IN_COURSE1 = "instructor1OfCourse1";
 
     @Override
     protected void prepareTestData() {
@@ -39,7 +40,7 @@ public class FeedbackSessionsResultsSummaryTest extends BaseLogicTest {
         ______TS("typical case: get all results");
 
         FeedbackSessionAttributes session = dataBundle.feedbackSessions.get("session1InCourse1");
-        InstructorAttributes instructor = dataBundle.instructors.get("instructor1OfCourse1");
+        InstructorAttributes instructor = dataBundle.instructors.get(INSTRUCTOR_IN_COURSE1);
 
         String export = fsLogic.getFeedbackSessionResultsSummaryAsCsv(
                 session.getFeedbackSessionName(), session.getCourseId(), instructor.email, null, null, true, true);
@@ -154,7 +155,7 @@ public class FeedbackSessionsResultsSummaryTest extends BaseLogicTest {
         DataBundle newDataBundle = loadDataBundle("/FeedbackSessionQuestionTypeTest.json");
         removeAndRestoreDataBundle(newDataBundle);
         session = newDataBundle.feedbackSessions.get("mcqSession");
-        instructor = newDataBundle.instructors.get("instructor1OfCourse1");
+        instructor = newDataBundle.instructors.get(INSTRUCTOR_IN_COURSE1);
 
         export = fsLogic.getFeedbackSessionResultsSummaryAsCsv(
                 session.getFeedbackSessionName(), session.getCourseId(), instructor.email, null, null, true, true);
@@ -218,7 +219,7 @@ public class FeedbackSessionsResultsSummaryTest extends BaseLogicTest {
         ______TS("MSQ results");
 
         session = newDataBundle.feedbackSessions.get("msqSession");
-        instructor = newDataBundle.instructors.get("instructor1OfCourse1");
+        instructor = newDataBundle.instructors.get(INSTRUCTOR_IN_COURSE1);
 
         export = fsLogic.getFeedbackSessionResultsSummaryAsCsv(
                 session.getFeedbackSessionName(), session.getCourseId(), instructor.email, null, null, true, true);
@@ -286,7 +287,7 @@ public class FeedbackSessionsResultsSummaryTest extends BaseLogicTest {
         ______TS("NUMSCALE results");
 
         session = newDataBundle.feedbackSessions.get("numscaleSession");
-        instructor = newDataBundle.instructors.get("instructor1OfCourse1");
+        instructor = newDataBundle.instructors.get(INSTRUCTOR_IN_COURSE1);
 
         export = fsLogic.getFeedbackSessionResultsSummaryAsCsv(
                 session.getFeedbackSessionName(), session.getCourseId(), instructor.email, null, null, true, true);
@@ -334,7 +335,7 @@ public class FeedbackSessionsResultsSummaryTest extends BaseLogicTest {
         ______TS("CONSTSUM results");
 
         session = newDataBundle.feedbackSessions.get("constSumSession");
-        instructor = newDataBundle.instructors.get("instructor1OfCourse1");
+        instructor = newDataBundle.instructors.get(INSTRUCTOR_IN_COURSE1);
 
         export = fsLogic.getFeedbackSessionResultsSummaryAsCsv(
                 session.getFeedbackSessionName(), session.getCourseId(), instructor.email, null, null, true, true);
@@ -441,7 +442,7 @@ public class FeedbackSessionsResultsSummaryTest extends BaseLogicTest {
         ______TS("CONTRIB results");
 
         session = newDataBundle.feedbackSessions.get("contribSession");
-        instructor = newDataBundle.instructors.get("instructor1OfCourse1");
+        instructor = newDataBundle.instructors.get(INSTRUCTOR_IN_COURSE1);
 
         export = fsLogic.getFeedbackSessionResultsSummaryAsCsv(
                 session.getFeedbackSessionName(), session.getCourseId(), instructor.email, null, null, true, true);
@@ -496,7 +497,7 @@ public class FeedbackSessionsResultsSummaryTest extends BaseLogicTest {
 
         // instructor not allowed to see student
         session = newDataBundle.feedbackSessions.get("contribSessionStudentAnonymised");
-        instructor = newDataBundle.instructors.get("instructor1OfCourse1");
+        instructor = newDataBundle.instructors.get(INSTRUCTOR_IN_COURSE1);
 
         String student1AnonName = getStudentAnonName(newDataBundle, "student1InCourse1");
         String student2AnonName = getStudentAnonName(newDataBundle, "student2InCourse1");
@@ -583,7 +584,7 @@ public class FeedbackSessionsResultsSummaryTest extends BaseLogicTest {
         ______TS("RUBRIC results");
 
         session = newDataBundle.feedbackSessions.get("rubricSession");
-        instructor = newDataBundle.instructors.get("instructor1OfCourse1");
+        instructor = newDataBundle.instructors.get(INSTRUCTOR_IN_COURSE1);
 
         export = fsLogic.getFeedbackSessionResultsSummaryAsCsv(
                 session.getFeedbackSessionName(), session.getCourseId(), instructor.email, null, null, true, true);
@@ -664,7 +665,7 @@ public class FeedbackSessionsResultsSummaryTest extends BaseLogicTest {
         ______TS("RANK results");
 
         session = newDataBundle.feedbackSessions.get("rankSession");
-        instructor = newDataBundle.instructors.get("instructor1OfCourse1");
+        instructor = newDataBundle.instructors.get(INSTRUCTOR_IN_COURSE1);
 
         export = fsLogic.getFeedbackSessionResultsSummaryAsCsv(
                 session.getFeedbackSessionName(), session.getCourseId(), instructor.email, null, null, true, true);
@@ -719,7 +720,7 @@ public class FeedbackSessionsResultsSummaryTest extends BaseLogicTest {
         ______TS("MSQ results without statistics");
 
         session = newDataBundle.feedbackSessions.get("msqSession");
-        instructor = newDataBundle.instructors.get("instructor1OfCourse1");
+        instructor = newDataBundle.instructors.get(INSTRUCTOR_IN_COURSE1);
 
         export = fsLogic.getFeedbackSessionResultsSummaryAsCsv(
                 session.getFeedbackSessionName(), session.getCourseId(), instructor.email, null, null, true, false);
