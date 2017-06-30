@@ -182,8 +182,7 @@ public class AdminEmailListGenerator extends RemoteApiClient {
         List<Instructor> allInstructors = (List<Instructor>) PM.newQuery(q).execute();
 
         for (Instructor instructor : allInstructors) {
-            if ((instructor.getGoogleId() != null && emailListConfig.instructorStatus == InstructorStatus.REG
-                        || instructor.getGoogleId() == null && emailListConfig.instructorStatus == InstructorStatus.UNREG
+            if ((isRegisteredInstructor(instructor) || isNotRegisteredInstructor(instructor)
                         || emailListConfig.instructorStatus == InstructorStatus.ALL)
                     && isInstructorCreatedInRange(instructor)) {
                 instructorEmailSet.add(instructor.getEmail());
@@ -200,8 +199,8 @@ public class AdminEmailListGenerator extends RemoteApiClient {
         List<CourseStudent> allStudents = (List<CourseStudent>) PM.newQuery(q).execute();
 
         for (CourseStudent student : allStudents) {
-            if ((isRegistered(student) && emailListConfig.studentStatus == StudentStatus.REG
-                        || !isRegistered(student) && emailListConfig.studentStatus == StudentStatus.UNREG
+            if ((isRegisteredStudent(student)
+                        || isNotRegisteredStudent(student)
                         || emailListConfig.studentStatus == StudentStatus.ALL)
                     && isStudentCreatedInRange(student)) {
                 studentEmailSet.add(student.getEmail());
@@ -211,8 +210,20 @@ public class AdminEmailListGenerator extends RemoteApiClient {
         return studentEmailSet;
     }
 
-    private boolean isRegistered(CourseStudent student) {
-        return student.getGoogleId() != null && !student.getGoogleId().isEmpty();
+    private boolean isRegisteredStudent(CourseStudent student) {
+        return student.getGoogleId() != null && !student.getGoogleId().isEmpty() && emailListConfig.studentStatus == StudentStatus.REG;
+    }
+
+    private boolean isNotRegisteredStudent(CourseStudent student) {
+      return student.getGoogleId() == null && student.getGoogleId().isEmpty() && emailListConfig.studentStatus == StudentStatus.UNREG;
+    }
+
+    private boolean isRegisteredInstructor(Instructor instructor) {
+      return instructor.getGoogleId() != null && emailListConfig.instructorStatus == InstructorStatus.REG;
+    }
+
+    private boolean isNotRegisteredInstructor(Instructor instructor) {
+      return instructor.getGoogleId() == null && emailListConfig.instructorStatus == InstructorStatus.UNREG;
     }
 
     private void writeEmailsIntoTextFile(HashSet<String> studentEmailSet, HashSet<String> instructorEmailSet) {
