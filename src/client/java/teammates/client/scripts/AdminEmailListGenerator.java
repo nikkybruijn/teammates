@@ -39,7 +39,7 @@ import teammates.storage.entity.Instructor;
  */
 public class AdminEmailListGenerator extends RemoteApiClient {
 
-    private final static Logger LOGGER = Logger.getLogger(AdminEmailListGenerator.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(AdminEmailListGenerator.class.getName());
 
     private enum StudentStatus { REG, UNREG, ALL }
 
@@ -71,7 +71,6 @@ public class AdminEmailListGenerator extends RemoteApiClient {
 
     @Override
     protected void doOperation() {
-
         try {
             getInstructorEmailConfiguration();
             getStudentEmailConfiguration();
@@ -80,58 +79,43 @@ public class AdminEmailListGenerator extends RemoteApiClient {
             System.out.print(e.getMessage() + "\n");
         }
 
-        System.out.print("\n\nstudent : " + emailListConfig.student + "\n");
+        printStudentStatus();
+        printInstructorStatus();
 
-        if (emailListConfig.student) {
-            System.out.print("Student Status: ");
-            switch (emailListConfig.studentStatus) {
-            case REG:
-                System.out.print("REG\n");
-                break;
-            case UNREG:
-                System.out.print("UNREG\n");
-                break;
-            case ALL:
-            default:
-                System.out.print("ALL\n");
-                break;
-            }
-        }
+    }
 
-        if (emailListConfig.studentCreatedDateRangeStart != null) {
-            System.out.print("student start : " + emailListConfig.studentCreatedDateRangeStart + "\n");
-        }
+    private void printStudentStatus() {
+      System.out.print("\n\nstudent : " + emailListConfig.student + "\n");
 
-        if (emailListConfig.studentCreatedDateRangeEnd != null) {
-            System.out.print("student end : " + emailListConfig.studentCreatedDateRangeEnd + "\n");
-        }
+      if (emailListConfig.student) {
+        System.out.print("Student Status: ");
+        System.out.print(emailListConfig.studentStatus + " \n");
+      }
 
-        System.out.print("instructor : " + emailListConfig.instructor + "\n");
+      if (emailListConfig.studentCreatedDateRangeStart != null) {
+        System.out.print("Student start : " + emailListConfig.studentCreatedDateRangeStart + "\n");
+      }
 
-        if (emailListConfig.instructor) {
-            System.out.print("Instructor Status: ");
-            switch (emailListConfig.studentStatus) {
-            case REG:
-                System.out.print("REG\n");
-                break;
-            case UNREG:
-                System.out.print("UNREG\n");
-                break;
-            case ALL:
-            default:
-                System.out.print("ALL\n");
-                break;
-            }
-        }
+      if (emailListConfig.studentCreatedDateRangeEnd != null) {
+        System.out.print("Student end : " + emailListConfig.studentCreatedDateRangeEnd + "\n");
+      }
+    }
 
-        if (emailListConfig.instructorCreatedDateRangeStart != null) {
-            System.out.print("instructor start : " + emailListConfig.instructorCreatedDateRangeStart + "\n");
-        }
+    private void printInstructorStatus() {
+      System.out.print("instructor : " + emailListConfig.instructor + "\n");
 
-        if (emailListConfig.instructorCreatedDateRangeEnd != null) {
-            System.out.print("instructor end : " + emailListConfig.instructorCreatedDateRangeEnd + "\n");
-        }
+      if (emailListConfig.instructor) {
+        System.out.print("Instructor Status: ");
+        System.out.print(emailListConfig.instructorStatus + " \n");
+      }
 
+      if (emailListConfig.instructorCreatedDateRangeStart != null) {
+        System.out.print("instructor start : " + emailListConfig.instructorCreatedDateRangeStart + "\n");
+      }
+
+      if (emailListConfig.instructorCreatedDateRangeEnd != null) {
+        System.out.print("instructor end : " + emailListConfig.instructorCreatedDateRangeEnd + "\n");
+      }
     }
 
     private void getInstructorEmailConfiguration() throws InvalidParametersException {
