@@ -3,11 +3,7 @@ package teammates.common.util;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 
 /**
  * Provides means to handle, manipulate, and convert JSON objects to/from strings.
@@ -70,6 +66,15 @@ public final class JsonUtils {
     public static JsonElement parse(String json) {
         JsonParser parser = new JsonParser();
         return parser.parse(json);
+    }
+
+    public static JsonObject getPropertyFromConfig(String dependenciesConfig, String propertyString) {
+      JsonElement jsonElement = parse(dependenciesConfig);
+      JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+      JsonElement property = jsonObject.get(propertyString);
+
+      return property.getAsJsonObject();
     }
 
 }

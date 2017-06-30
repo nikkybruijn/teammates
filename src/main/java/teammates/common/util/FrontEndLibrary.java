@@ -37,8 +37,7 @@ public final class FrontEndLibrary {
     static {
 
         String dependenciesConfigString = FileHelper.readResourceFile("package.json");
-        DEPENDENCIES_CONFIG = JsonUtils.parse(dependenciesConfigString).getAsJsonObject()
-                                       .get("dependencies").getAsJsonObject();
+        DEPENDENCIES_CONFIG = JsonUtils.getPropertyFromConfig(dependenciesConfigString, "dependencies");
 
         BLANKET = getLibrarySource("blanket", "dist/qunit/blanket.min.js");
         BOOTBOX = getLibrarySource("bootbox", "bootbox.min.js");
